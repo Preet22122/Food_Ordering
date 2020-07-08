@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop Now</title>
+    <script>
+         function fetchPunjabi() {
+   var xml=new XMLHttpRequest();
+        xml.onreadystatechange=function () {
+            if(xml.readyState==4 && xml.status==200){
+                var response=JSON.parse(xml.response);
+                console.log(response);
+                var ans1="";
+                var ans2="";
+                var ans3="";
+                var ans4="";
+                var ans5="";
+                var ans6="";
+
+                for(var i=0;i<response.length;i++){
+                    var quantity="<select id=\"q"+i+"\">";
+for(var j=1;j<=10;j++){
+    quantity+="<option value=\""+j+"\">"+j+"</option>"
+}
+quantity+="</select>";
+                    console.log(response[i][0]);
+                     ans1+="<div class=\"col-sm-4\">";
+                     ans2+="<div class=\"col-sm-4\">";
+                     ans3+="<div class=\"col-sm-4\">";
+                     ans4+="<div class=\"col-sm-4\">";
+                     ans5+="<div class=\"col-sm-4\">";
+                     ans6+="<div class=\"col-sm-4\">";
+
+
+                    if(response[i][8]=="Punjabi")
+                    {
+                    ans1+="<h3 style='color:deepskyblue'>"+response[i][1]+"</h3><br><img onclick=\"opendetail("+response[i][0]+")\" src=\"{%  static '/media/products/'%}"+response[i][6]+"\" width=\"200\" height=\"100\"><br><button style=\"margin-top:5px;\" class=\"btn btn-danger\" onclick=\"addtocart("+response[i][0]+","+i+")\">Add To Cart</button>";
+               var sp=response[i][4];
+               var disc=response[i][5];
+               var netp=parseInt(response[i][4])-parseInt(response[i][5]);
+                    ans1+="<br><h3 style='color:deepskyblue'>Rs."+netp+"&nbsp;&nbsp;<span style='color:red;text-decoration:line-through'>\n" +
+                        "  <span style='color:deepskyblue'>"+sp+"</span>\n" +
+                        "</span>&nbsp;save Rs. "+disc+"</h3>";
+                ans1+="&nbsp;&nbsp;&nbsp;"+quantity;
+                    ans1+="</div>";
+                }
+                     if(response[i][8]=="North Indian")
+                    {
+                    ans2+="<h3 style='color:deepskyblue'>"+response[i][1]+"</h3><br><img onclick=\"opendetail("+response[i][0]+")\" src=\"{%  static '/media/products/'%}"+response[i][6]+"\" width=\"200\" height=\"100\"><br><button style=\"margin-top:5px;\" class=\"btn btn-danger\" onclick=\"addtocart("+response[i][0]+","+i+")\">Add To Cart</button>";
+               var sp=response[i][4];
+               var disc=response[i][5];
+               var netp=parseInt(response[i][4])-parseInt(response[i][5]);
+                    ans2+="<br><h3 style='color:deepskyblue'>Rs."+netp+"&nbsp;&nbsp;<span style='color:red;text-decoration:line-through'>\n" +
+                        "  <span style='color:deepskyblue'>"+sp+"</span>\n" +
+                        "</span>&nbsp;save Rs. "+disc+"</h3>";
+                ans2+="&nbsp;&nbsp;&nbsp;"+quantity;
+                    ans2+="</div>";
+                }
+                     if(response[i][8]=="West Indian")
+                    {
+                    ans3+="<h3 style='color:deepskyblue'>"+response[i][1]+"</h3><br><img onclick=\"opendetail("+response[i][0]+")\" src=\"{%  static '/media/products/'%}"+response[i][6]+"\" width=\"200\" height=\"100\"><br><button style=\"margin-top:5px;\" class=\"btn btn-danger\" onclick=\"addtocart("+response[i][0]+","+i+")\">Add To Cart</button>";
+               var sp=response[i][4];
+               var disc=response[i][5];
+               var netp=parseInt(response[i][4])-parseInt(response[i][5]);
+                    ans3+="<br><h3 style='color:deepskyblue'>Rs."+netp+"&nbsp;&nbsp;<span style='color:red;text-decoration:line-through'>\n" +
+                        "  <span style='color:deepskyblue'>"+sp+"</span>\n" +
+                        "</span>&nbsp;save Rs. "+disc+"</h3>";
+                ans3+="&nbsp;&nbsp;&nbsp;"+quantity;
+                    ans3+="</div>";
+                }
+                      if(response[i][8]=="East Indian")
+                    {
+                    ans4+="<h3 style='color:deepskyblue'>"+response[i][1]+"</h3><br><img onclick=\"opendetail("+response[i][0]+")\" src=\"{%  static '/media/products/'%}"+response[i][6]+"\" width=\"200\" height=\"100\"><br><button style=\"margin-top:5px;\" class=\"btn btn-danger\" onclick=\"addtocart("+response[i][0]+","+i+")\">Add To Cart</button>";
+               var sp=response[i][4];
+               var disc=response[i][5];
+               var netp=parseInt(response[i][4])-parseInt(response[i][5]);
+                    ans4+="<br><h3 style='color:deepskyblue'>Rs."+netp+"&nbsp;&nbsp;<span style='color:red;text-decoration:line-through'>\n" +
+                        "  <span style='color:deepskyblue'>"+sp+"</span>\n" +
+                        "</span>&nbsp;save Rs. "+disc+"</h3>";
+                ans4+="&nbsp;&nbsp;&nbsp;"+quantity;
+                    ans4+="</div>";
+                }
+                       if(response[i][8]=="South India")
+                    {
+                    ans5+="<h3 style='color:deepskyblue'>"+response[i][1]+"</h3><br><img onclick=\"opendetail("+response[i][0]+")\" src=\"{%  static '/media/products/'%}"+response[i][6]+"\" width=\"200\" height=\"100\"><br><button style=\"margin-top:5px;\" class=\"btn btn-danger\" onclick=\"addtocart("+response[i][0]+","+i+")\">Add To Cart</button>";
+               var sp=response[i][4];
+               var disc=response[i][5];
+               var netp=parseInt(response[i][4])-parseInt(response[i][5]);
+                    ans5+="<br><h3 style='color:deepskyblue'>Rs."+netp+"&nbsp;&nbsp;<span style='color:red;text-decoration:line-through'>\n" +
+                        "  <span style='color:deepskyblue'>"+sp+"</span>\n" +
+                        "</span>&nbsp;save Rs. "+disc+"</h3>";
+                ans5+="&nbsp;&nbsp;&nbsp;"+quantity;
+                    ans5+="</div>";
+                }
+                      if(response[i][8]=="Fast Food")
+                    {
+                    ans6+="<h3 style='color:deepskyblue'>"+response[i][1]+"</h3><br><img onclick=\"opendetail("+response[i][0]+")\" src=\"{%  static '/media/products/'%}"+response[i][6]+"\" width=\"200\" height=\"100\"><br><button style=\"margin-top:5px;\" class=\"btn btn-danger\" onclick=\"addtocart("+response[i][0]+","+i+")\">Add To Cart</button>";
+               var sp=response[i][4];
+               var disc=response[i][5];
+               var netp=parseInt(response[i][4])-parseInt(response[i][5]);
+                    ans6+="<br><h3 style='color:deepskyblue'>Rs."+netp+"&nbsp;&nbsp;<span style='color:red;text-decoration:line-through'>\n" +
+                        "  <span style='color:deepskyblue'>"+sp+"</span>\n" +
+                        "</span>&nbsp;save Rs. "+disc+"</h3>";
+                ans6+="&nbsp;&nbsp;&nbsp;"+quantity;
+                    ans6+="</div>";
+                }
+                }
+
+
+
+                document.getElementById('divPunjabi').innerHTML=ans1;
+                document.getElementById('divNI').innerHTML=ans2;
+                document.getElementById('divWI').innerHTML=ans3;
+                document.getElementById('divEI').innerHTML=ans4;
+                document.getElementById('divSI').innerHTML=ans5;
+                document.getElementById('divF').innerHTML=ans6;
+            }
+        };
+        xml.open('GET','viewproducts',true);
+        xml.send();
+        }
+
+function opendetail(pid) {
+    window.location.href="productdetailpage?pid="+pid;
+}
+
+        function filterproducts(value){
+             var xml=new XMLHttpRequest();
+        xml.onreadystatechange=function () {
+            if(xml.readyState==4 && xml.status==200){
+                var response=JSON.parse(xml.response);
+                console.log(response);
+                var ans="";
+
+                for(var i=0;i<response.length;i++){
+                    console.log(response[i][0]);
+
+                      var quantity="<select id=\"q"+i+"\">";
+for(var j=1;j<=10;j++){
+    quantity+="<option value=\""+j+"\">"+j+"</option>"
+}
+quantity+="</select>";
+                     ans+="<div class=\"col-sm-3\">";
+                    ans+="<h3 style=\"color: deepskyblue\">"+response[i][1]+"</h3><br><img onclick=\"opendetail("+response[i][0]+")\" src=\"{%  static '/media/products/'%}"+response[i][6]+"\" width=\"200\" height=\"100\"><br><button style=\"margin-top:5px;\" class=\"btn btn-danger\" onclick=\"addtocart("+response[i][0]+","+i+")\">Add To Cart</button>";
+                 var sp=response[i][4];
+               var disc=response[i][5];
+               var netp=parseInt(response[i][4])-parseInt(response[i][5]);
+                    ans+="<br><h3 style=\"color: deepskyblue\">Rs."+netp+"&nbsp;&nbsp;<span style='color:red;text-decoration:line-through'>\n" +
+                        "  <span style='color:deepskyblue'>"+sp+"</span>\n" +
+                        "</span>&nbsp;save Rs. "+disc+"</h3>";
+                    ans+="&nbsp;&nbsp;&nbsp;"+quantity;
+                ans+="</div>";
+                }
+                document.getElementById('divproducts').innerHTML=ans;
+            }
+        };
+        xml.open('GET','viewfilteredproducts?value='+value,true);
+        xml.send();
+        }
+
+        function addtocart(pid,id){
+
+var quantity=document.getElementById('q'+id).value;
+{##}
+{#alert(pid+" "+quantity);#}
+   var xml=new XMLHttpRequest();
+        xml.onreadystatechange=function () {
+            if(xml.readyState==4 && xml.status==200){
+                var response=xml.responseText.trim();
+                if(response=='success'){
+                    alert('added to cart successfully');
+                    window.location.reload();
+                }
+            }
+        };
+        xml.open('GET',"addtocart?pid="+pid+"&quantity="+quantity,true);
+        xml.send();
+
+        }
+    </script>
+    <link href="{% static 'css/bootstrap.css' %}" type="text/css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <style>
+body {
+    font-family: 'Sofia';font-size: 22px;
+}
+</style>
+</head>
+<body style="background-image: url({% static '/media/images/user.jpg' %});background-repeat: no-repeat; background-size: cover" onload="fetchPunjabi()">
+{%  include 'userheader.html' %}
+
+<!-------------------------------->
+<marquee width="100%" direction="left" height="60px">
+    <h1 style="color: silver"> --------Punjabi--------North Indian--------West Indian--------East Indian--------South Indian--------Fast Food--------</h1>
+</marquee>
+<div class="page-header text-center">
+    <h1 style="color: gold">~~~~~~~~~~Welcome To Preet Da Dabha~~~~~~~~~~</h1>
+    <h3 style="color: gold">~~~~~Collection of All Indian Flavours~~~~~</h3>
+</div>
+<div class="page-header text-center">
+    <h1 style="color: silver">----------Punjabi Rotti----------</h1>
+    <div id="divPunjabi" style="margin: 10px;" class="row">
+    </div></div>
+<div class="page-header text-center">
+    <h1 style="color: silver">----------North Indian----------</h1>
+    <div id="divNI" style="margin: 10px;" class="row">
+    </div></div>
+    <div class="page-header text-center">
+    <h1 style="color: silver">----------West Indian----------</h1>
+    <div id="divWI" style="margin: 10px;" class="row">
+    </div></div>
+        <div class="page-header text-center">
+    <h1 style="color: silver">----------East Indian----------</h1>
+    <div id="divEI" style="margin: 10px;" class="row">
+    </div></div>
+            <div class="page-header text-center">
+    <h1 style="color: silver">----------South Indian----------</h1>
+    <div id="divSI" style="margin: 10px;" class="row">
+    </div></div>
+                <div class="page-header text-center">
+    <h1 style="color: silver">----------Fast Food----------</h1>
+    <div id="divF" style="margin: 10px;" class="row">
+</div>
+</div>
+</body>
+</html>

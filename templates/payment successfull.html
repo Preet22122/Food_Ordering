@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% include 'userheader.html' %}
+<div class="container">
+    <div class="page-header text-center">
+        <h1>ORDER PLACED SUCCESSFULLY</h1>
+        <h2>PAYMENT DETAILS</h2>
+    </div>
+    <div>
+        <table class="table table-bordered table-hover">
+            <tr><td>Serial No</td><td>Product ID</td><td>Product Name</td><td>Quantity</td><td>Selling Price</td><td>Discount</td><td>Netprice</td><td>TotalPrice</td></tr>
+       {% for r in data.0 %}
+           <tr><td>Serial No</td><td>{{ r.pid }}</td><td>{{ r.pname }}</td><td>{{ r.quantity }}</td><td>Rs.{{ r.sp }}</td><td>Rs.{{ r.discount }}</td><td>Rs.{{ r.netprice }}</td><td>Rs.{{ r.totalprice }}</td>
+           <td></tr>
+            {%  endfor %}
+        </table>
+    <div >
+        <h4>Total Bill Rs. {{ data.1 }}</h4>
+        <h4>Username:- {{ data.4  }}</h4>
+        <h4>Mobile:- {{ data.3 }}</h4>
+        <h4>Address:- {{ data.2 }}</h4>
+
+
+
+
+
+    </div>
+    </div>
+</div>
+</body>
+</html>

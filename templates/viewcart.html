@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>viewcart</title>
+    <script>
+         function openmodalpopup() {
+            $('#myModal').modal('show');
+        }
+        function deleteproduct(pid,ct) {
+            var result=confirm('are you sure want to delete');
+            if(result == true){
+                      window.location.href='deleteitemfromcart?pid='+pid+"&ct="+ct;
+            }
+
+        }
+    </script>
+</head>
+<body style="background-image: url({% static '/media/images/user.jpg' %});background-repeat: no-repeat; background-size: cover" >
+{% include 'userheader.html' %}
+<div class="container">
+    <div class="page-header text-center">
+        <h1 style="color: gold">SHOPPING CART  <button style="margin-left: 55%" class="btn btn-success" onclick="openmodalpopup()">Proceed To Payment</button></h1>
+    </div>
+    <div>
+        <table class="table table-bordered table-hover" style="color: silver">
+            <tr><td>Serial No</td><td>Product ID</td><td>Product Name</td><td>Quantity</td><td>Selling Price</td><td>Discount</td><td>Netprice</td><td>TotalPrice</td><td>Delete</td></tr>
+       {% for r in data.0 %}
+           <tr><td>Serial No</td><td>{{ r.pid }}</td><td>{{ r.pname }}</td><td>{{ r.quantity }}</td><td>Rs.{{ r.sp }}</td><td>Rs.{{ r.discount }}</td><td>Rs.{{ r.netprice }}</td><td>Rs.{{ r.totalprice }}</td>
+           <td><button class="btn btn-danger" onclick="deleteproduct('{{ r.pid }}','{{ r.ct }}')">Delete</button></td></tr>
+            {%  endfor %}
+        </table>
+    <div >
+        <h2 style="color: silver">Total Bill Rs. {{ data.1 }}</h2>
+
+{#       modal codse start here #}
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Fill Details</h4>
+        </div>
+        <div class="modal-body">
+         <form action="insertcart" method="post" >
+             {% csrf_token %}
+             <div class="form-group">
+                 <label>Enter your name</label>
+                 <input type="text" name="name" class="form-control" required>
+             </div>
+                    <div class="form-group">
+                 <label>Enter your email</label>
+                 <input type="text" name="email" class="form-control" required>
+             </div>
+                    <div class="form-group">
+                 <label>Enter your mobile</label>
+                 <input type="text" name="mobile" class="form-control" required>
+             </div>
+                    <div class="form-group">
+                 <label>Enter your address</label>
+                        <textarea name="address" class="form-control" required></textarea>
+                        <input type="hidden" value="{{ data.1 }}" name="totalbill">
+             </div>
+              <script
+                                        src="https://checkout.razorpay.com/v1/checkout.js"
+                                        data-key="rzp_test_96HeaVmgRvbrfT"
+                                        data-amount="{{ data.2 }}"
+                                        data-buttontext="ORDER NOW"
+                                        data-name="Online Shopping"
+                                        data-description="Thank You for payment with us"
+                                        data-image="{% static 'media/products/android-nougat.png' %}"
+                                        data-prefill.name=""
+                                        data-prefill.email="onlineshopping@gmail.com"
+                                        data-theme.color="#9acfea"
+                                    ></script>
+         </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{#       modal codse end here #}
+
+
+    </div>
+    </div>
+</div>
+</body>
+</html>

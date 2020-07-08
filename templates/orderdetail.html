@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% include 'userheader.html' %}
+<div class="container">
+    <div class="page-header text-center">
+<h1>Order Detail</h1>
+    </div>
+    <div style="margin: 10px;">
+<table class="table table-bordered table-hover">
+<tr><th>Serial No</th><th>Detail Id</th><th>Order Id</th><th>Pid</th><th>Name</th><th>Quantity</th><th>Selling Price</th><th>Discount</th><th>NetPrice</th><th>TotalPrice</th></tr>
+    {%  for d in data.0 %}
+<tr><td>{{ d.serialno }}</td><td>{{ d.detailid }}</td><td>{{ d.orderid }}</td><td>{{ d.pid }}</td><td>{{ d.name }}</td><td>{{ d.quantity }}</td><td>Rs.{{ d.sp }}</td><td>Rs.{{ d.discount }}</td><td>Rs.{{ d.netprice }}</td><td>Rs.{{ d.totalprice }}</td></tr>
+    {% endfor %}
+</table>
+    <div class="text-center">
+        <h3>Total Bill Rs.{{ data.1 }}</h3>
+    </div>
+    </div>
+</div>
+</body>
+</html>

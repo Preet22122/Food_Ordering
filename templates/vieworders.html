@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function fetchorders() {
+            var mobile=document.getElementById('mobileno').value;
+            if(mobile==""){
+                alert('enter mobile no');
+            }
+            else if(mobile.length!=10){
+                alert('mobile no must be of length 10')
+            }
+            else{
+                   var xml=new XMLHttpRequest();
+        xml.onreadystatechange=function () {
+            if(xml.readyState==4 && xml.status==200){
+                var response=JSON.parse(xml.response);
+                if(response.length==0){
+                   document.getElementById('divorders').innerHTML="<h4>No any order placed using this mobile  number</h4>";
+                }
+                else{
+                     console.log(response);
+                var ans="";
+                ans+="<table class=\"table table-bordered table-hover\"><tr><td>Serial No</td><td>Orderid</td><td>Username</td><td>Address</td><td>UserEmail</td><td>TotalBill</td><td>Mobile</td><td>OrderDate</td><td>View Order Detail</td></tr>";
+                for(var i=0;i<response.length;i++){
+                    console.log(response[i][0]);
+                    ans+="<tr><td>"+(i+1)+"</td><td>"+response[i][0]+"</td><td>"+response[i][1]+"</td><td>"+response[i][2]+"</td><td>"+response[i][3]+"</td><td>Rs."+response[i][4]+"</td><td>"+response[i][5]+"</td><td>"+response[i][6]+"</td><td><button style=\"margin-top:5px;\" class=\"btn btn-danger\" onclick=\"orderdetail("+response[i][0]+")\">Detail</button></td></tr>";
+                }
+                ans+="</table>";
+                document.getElementById('divorders').innerHTML=ans;
+                }
+
+            }
+        };
+        xml.open('GET','fetchorders?mobile='+mobile,true);
+        xml.send();
+            }
+        }
+        function orderdetail(oid){
+            window.location.href='orderdetail?orderid='+oid;
+        }
+    </script>
+</head>
+<body style="background-image: url({% static '/media/images/user.jpg' %});background-repeat: no-repeat; background-size: cover">
+
+{%  include 'userheader.html' %}
+<div class="page-header text-center">
+    <h1 style="color: gold">ORDERS</h1>
+</div>
+
+        <form style="width: 50%;margin-left: 10px;" class="form-inline text-center">
+            <div class="form-group">
+            <label style="color:silver">Enter Mobile No</label>
+             <input type="text" placeholder="enter mobile number" title="enter mobile number" id="mobileno" class="form-control">
+        </div>
+              <div class="form-group">
+             <input style="margin-left: 5px;" type="button" value="Fetch" onclick="fetchorders()" class="btn btn-success">
+        </div>
+        </form>
+
+<div id="divorders" style="margin: 10px;">
+
+</div>
+</body>
+</html>

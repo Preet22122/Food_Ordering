@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="{% static 'css/bootstrap.css' %}" type="text/css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+    <style>
+body {
+    font-family: 'Sofia';font-size: 22px;
+}
+</style>
+</head>
+
+<body style="background-image: url({% static '/media/images/admin.jpg' %});background-repeat: no-repeat; background-size: cover">
+<div class="page-header text-center">
+        <h1 style="color: white">Welcome {{ request.session.adminemail }}</h1>
+    </div>
+<div class="page-header text-center">
+    <div class="page-header text-center">
+        <a href="openviewproducts" class="btn btn-warning"><h4>----View Products----</h4></a>
+        </div>
+
+    <div class="page-header text-center">
+        <a href="openaddproducts" class="btn btn-warning"><h4>----Add Products----</h4></a>
+        </div>
+    <div class="page-header text-center">
+        <a href="openadminchangepass" class="btn btn-warning"><h4>----Change Password----</h4></a>
+        </div>
+    <div class="page-header text-center">
+    <a href="adminlogout" class="btn btn-warning"><h4>----Logout----</h4></a>
+        </div>
+    </div>
+
+</body>
+</html>

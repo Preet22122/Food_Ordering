@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Products</title>
+<script>
+    function editproduct(){
+        var formdata=new FormData();
+        var controls=document.getElementById('form1').elements;
+        alert(controls.length);
+        var count=0;
+        for(var i=0;i<controls.length;i++){
+            if(controls[i].name=="" || controls[i].name==null){
+                count=1;
+            }
+
+            {#alert(controls[i].type+" "+controls[i].name+" "+controls[i].value);#}
+            if(controls[i].type=='file'){
+                  formdata.append(controls[i].name,controls[i].files[0]);
+            }
+            else{
+                  formdata.append(controls[i].name,controls[i].value);
+            }
+        }
+        if(count==1){
+            alert('give name to all controls');
+        }
+
+        else{
+            var xml=new XMLHttpRequest();
+        xml.onreadystatechange=function () {
+            if(xml.readyState==4 && xml.status==200){
+                var response=xml.responseText.trim();
+                if(response=="success"){
+                    alert('product addedd successfully');
+                }
+            }
+        };
+        xml.open('POST','addproduct',true);
+        xml.send(formdata);
+        }
+
+
+    }
+</script>
+    <link href="{% static 'css/bootstrap.css' %}" type="text/css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+    <style>
+body {
+    font-family: 'Sofia';font-size: 22px;
+}
+</style>
+</head>
+<body style="background-image: url({% static '/media/images/admin.jpg' %});background-repeat: no-repeat; background-size: cover">
+<div class="btn-group btn-group-justified">
+    <a href="admindashboard" class="btn btn-info">Home</a>
+   <a href="openviewproducts" class="btn btn-danger">View Products</a>
+    <a href="adminlogout" class="btn btn-warning">Logout</a>
+  </div>
+<div class="container">
+    <div class="page-header text-center">
+        <h1 style="color: white">ADD PRODUCTS</h1>
+    </div>
+    <form id="form1">
+<div class="form-group">
+<label style="color: skyblue">Choose Category</label>
+    <select name="cname" class="form-control">
+{% for r in list %}
+        <option value="{{ r }}">{{ r }}</option>
+        {%  endfor %}
+
+    </select>
+</div>
+        <div class="form-group">
+            <label style="color: skyblue">Enter Name</label>
+            <input type="text" name="pname" placeholder="Enter Name" title="enter name" required class="form-control">
+        </div>
+        <div class="form-group">
+            <label style="color: skyblue">Enter Description</label>
+            <textarea cols="10" rows="4" name="description" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <label style="color: skyblue">Enter Cost Price</label>
+            <input type="number" name="costprice" class="form-control">
+        </div>
+         <div class="form-group">
+            <label style="color: skyblue">Enter Selling Price</label>
+            <input type="number" name="sellingprice" class="form-control">
+        </div>
+         <div class="form-group">
+            <label style="color: skyblue">Enter Discount</label>
+            <input type="number" name="discount" class="form-control">
+        </div>
+         <div class="form-group">
+            <label style="color: skyblue">Enter Quantity</label>
+            <input type="number" name="quantity" class="form-control">
+        </div>
+    <div class="form-group">
+            <label style="color: skyblue">Choose Photo</label>
+            <input type="file" name="photo" class="form-control">
+        </div>
+        <div class="form-group">
+            <input type="button" name="btn" class="btn btn-warning" value="ADD" onclick="editproduct()">
+        </div>
+    </form>
+    {{ message }}
+</div>
+</body>
+</html>

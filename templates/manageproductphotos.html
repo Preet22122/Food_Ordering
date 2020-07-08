@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Food Gallery</title>
+    <script>
+        function deletephoto(photoid,pid){
+            var result=confirm('Are you sure want to delete?');
+            if(result==true){
+
+            window.location.href="deleteproductphoto?photoid="+photoid+"&pid="+pid;
+
+
+            }}
+    </script>
+</head>
+<link href="{% static 'css/bootstrap.css' %}" type="text/css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+    <style>
+body {
+    font-family: 'Sofia';font-size: 22px;
+}
+</style>
+<body style="background-image: url({% static '/media/images/admin.jpg' %});background-repeat: no-repeat; background-size: cover">
+<div class="btn-group btn-group-justified">
+    <a href="openaddproducts" class="btn btn-info">Add Products</a>
+    <a href="openadminchangepass" class="btn btn-danger">Change Password</a>
+    <a href="adminlogout" class="btn btn-warning">Logout</a>
+  </div>
+<div class="container">
+    <div class="page-header text-center">
+        <h1 style="color: deepskyblue">MANAGE PHOTOS</h1>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+<form action="insertphoto" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label style="color: deepskyblue">Product ID</label>
+        <input type="text" value="{{ data.1 }}" name="pid" readonly class="form-control">
+    </div>
+        <div class="form-group">
+        <label style="color: deepskyblue">Choose Photo</label>
+        <input type="file" name="photo" required  class="form-control">
+    </div>
+        <div class="form-group">
+        <label style="color: deepskyblue">Photo Type</label>
+        <input type="text" name="type" required placeholder="enter photo type" class="form-control">
+    </div>
+        <div class="form-group">
+        <input type="submit" value="Add" class="btn btn-warning">
+    </div>
+</form>
+            {{ message }}
+        </div>
+        <div class="col-sm-8">
+        <div class="row">
+{% for r in data.0 %}
+    <div class="col-sm-3" style="margin: 10px;">
+    <img  src="{% static '/media/products/' %}{{ r.photopath }}" width="200" height="100">
+    <h4 style="color: deepskyblue">{{ r.type }}</h4>
+    <button onclick="deletephoto('{{ r.photoid }}','{{ data.1 }}')" class="btn btn-warning">delete</button>
+    </div>
+            {% endfor %}
+         </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
