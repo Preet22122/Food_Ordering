@@ -27,160 +27,196 @@ def admindashboard(request):
     else:
         return render(request, 'adminlogin.html')
 def openadminchangepass(request):
-    return render(request,'adminchangepassword.html')
-def changeadminpassword(request):
-    oldpass = request.POST['oldpass']
-    newpass = request.POST['newpass']
-    conn = myconnection.connect('')
-    cr = conn.cursor()
-    email=""
     if request.session.has_key('adminemail'):
-        email = request.session['adminemail']
-        query = "select * from admin where email='" + email + "' and password='" + oldpass + "'"
-        cr.execute(query)
-        result = cr.fetchone()
-        if result == None:
-            return render(request, 'adminchangepassword.html', {"message": 'old password not match!!'})
-        else:
-            query = "update admin set password='" + newpass + "' where email='" + email + "'"
-            cr.execute(query)
-            conn.commit()
-            return render(request, 'adminchangepassword.html', {"message": 'password changed successfully!!'})
+        return render(request,'adminchangepassword.html')
     else:
-        return HttpResponseRedirect('openadminlogin')
+        return render(request, 'adminlogin.html')
+def changeadminpassword(request):
+    if request.session.has_key('adminemail'):
+        oldpass = request.POST['oldpass']
+        newpass = request.POST['newpass']
+        conn = myconnection.connect('')
+        cr = conn.cursor()
+        email=""
+        if request.session.has_key('adminemail'):
+            email = request.session['adminemail']
+            query = "select * from admin where email='" + email + "' and password='" + oldpass + "'"
+            cr.execute(query)
+            result = cr.fetchone()
+            if result == None:
+                return render(request, 'adminchangepassword.html', {"message": 'old password not match!!'})
+            else:
+                query = "update admin set password='" + newpass + "' where email='" + email + "'"
+                cr.execute(query)
+                conn.commit()
+                return render(request, 'adminchangepassword.html', {"message": 'password changed successfully!!'})
+        else:
+            return HttpResponseRedirect('openadminlogin')
+    else:
+        return render(request, 'adminlogin.html')
 def adminlogout(request):
     del request.session['adminemail']
     return HttpResponseRedirect('adminlogin')
 def openaddproducts(request):
-    list=myconnection.fethcategories('')
-    return render(request,'addproducts.html',{"list":list})
+    if request.session.has_key('adminemail'):
+        list=myconnection.fethcategories('')
+        return render(request,'addproducts.html',{"list":list})
+    else:
+        return render(request, 'adminlogin.html')
 @csrf_exempt
 def addproduct(request):
-    print()
-    cname = request.POST['cname']
-    pname=request.POST['pname']
-    decription = request.POST['description']
-    sp = request.POST['sellingprice']
-    cp= request.POST['costprice']
-    discount = request.POST['discount']
-    quantity= request.POST['quantity']
-    fs=FileSystemStorage()
-    photo=request.FILES['photo']
-    fs.save("products/"+photo.name,photo)
-    conn=myconnection.connect('')
-    cr=conn.cursor()
-    query="insert into products values(NULL,'"+pname+"','"+decription+"','"+str(cp)+"','"+str(sp)+"','"+str(discount)+"','"+str(photo.name)+"','"+str(quantity)+"','"+str(cname)+"')"
-    cr.execute(query)
-    conn.commit()
-    return HttpResponse('success')
+    if request.session.has_key('adminemail'):
+        print()
+        cname = request.POST['cname']
+        pname=request.POST['pname']
+        decription = request.POST['description']
+        sp = request.POST['sellingprice']
+        cp= request.POST['costprice']
+        discount = request.POST['discount']
+        quantity= request.POST['quantity']
+        fs=FileSystemStorage()
+        photo=request.FILES['photo']
+        fs.save("products/"+photo.name,photo)
+        conn=myconnection.connect('')
+        cr=conn.cursor()
+        query="insert into products values(NULL,'"+pname+"','"+decription+"','"+str(cp)+"','"+str(sp)+"','"+str(discount)+"','"+str(photo.name)+"','"+str(quantity)+"','"+str(cname)+"')"
+        cr.execute(query)
+        conn.commit()
+        return HttpResponse('success')
+    else:
+        return render(request, 'adminlogin.html')
 def openviewproducts(request):
-    return render(request,'viewproducts.html')
+    if request.session.has_key('adminemail'):
+        return render(request,'viewproducts.html')
+    else:
+        return render(request, 'adminlogin.html')
 def viewproducts(request):
-    conn=myconnection.connect('')
-    cr=conn.cursor()
-    query="select * from products"
-    cr.execute(query)
-    result=cr.fetchall()
-    list=[]
-    for row in result:
-        list.append(row)
-    return JsonResponse(list,safe=False)
+    if request.session.has_key('adminemail'):
+        conn=myconnection.connect('')
+        cr=conn.cursor()
+        query="select * from products"
+        cr.execute(query)
+        result=cr.fetchall()
+        list=[]
+        for row in result:
+            list.append(row)
+        return JsonResponse(list,safe=False)
+    else:
+        return render(request, 'adminlogin.html')
 def deleteproduct(request):
-    pid=request.GET['pid']
-    conn = myconnection.connect('')
-    cr = conn.cursor()
-    query = "delete  from products where pid='"+str(pid)+"'"
-    cr.execute(query)
-    conn.commit()
-    return HttpResponse('success')
+    if request.session.has_key('adminemail'):
+        pid=request.GET['pid']
+        conn = myconnection.connect('')
+        cr = conn.cursor()
+        query = "delete  from products where pid='"+str(pid)+"'"
+        cr.execute(query)
+        conn.commit()
+        return HttpResponse('success')
+    else:
+        return render(request, 'adminlogin.html')
 def gotoeditproductpage(request):
-    pid = request.GET['pid']
-    conn = myconnection.connect('')
-    cr = conn.cursor()
-    query="select * from products where pid='"+str(pid)+"'"
-    cr.execute(query)
-    row=cr.fetchone()
-    d = {}
-    d['pid'] = pid
-    d['pname'] = row[1]
-    d['description'] = row[2]
-    d['cp'] = row[3]
-    d['sp'] = row[4]
-    d['discount'] = row[5]
-    d['photo'] = row[6]
-    d['quantity'] = row[7]
-    d['cname'] = row[8]
-    x = myconnection.fethcategories('')
-    list=[]
-    list.append(x)
-    list.append(d)
-    return render(request,'editproduct.html',{"data":list})
+    if request.session.has_key('adminemail'):
+        pid = request.GET['pid']
+        conn = myconnection.connect('')
+        cr = conn.cursor()
+        query="select * from products where pid='"+str(pid)+"'"
+        cr.execute(query)
+        row=cr.fetchone()
+        d = {}
+        d['pid'] = pid
+        d['pname'] = row[1]
+        d['description'] = row[2]
+        d['cp'] = row[3]
+        d['sp'] = row[4]
+        d['discount'] = row[5]
+        d['photo'] = row[6]
+        d['quantity'] = row[7]
+        d['cname'] = row[8]
+        x = myconnection.fethcategories('')
+        list=[]
+        list.append(x)
+        list.append(d)
+        return render(request,'editproduct.html',{"data":list})
+    else:
+        return render(request, 'adminlogin.html')
 @csrf_exempt
 def editproduct(request):
-    print()
-    cname = request.POST['cname']
-    pid= request.POST['pid']
-    pname=request.POST['pname']
-    decription = request.POST['description']
-    sp = request.POST['sellingprice']
-    cp= request.POST['costprice']
-    discount = request.POST['discount']
-    quantity= request.POST['quantity']
-    hidden =request.POST['hidden']
-    query=""
-    fs = FileSystemStorage()
-    if hidden=="nofile":
-        query = "update products set pname='" + pname + "',description='" + decription + "',cp='" + str(cp) + "',sp='" + str(sp) + "',discount='" + str(discount) + "',quantity='" + str(quantity) + "',cname='" + str(cname) + "' where pid='" + str(pid) + "'"
+    if request.session.has_key('adminemail'):
+        print()
+        cname = request.POST['cname']
+        pid= request.POST['pid']
+        pname=request.POST['pname']
+        decription = request.POST['description']
+        sp = request.POST['sellingprice']
+        cp= request.POST['costprice']
+        discount = request.POST['discount']
+        quantity= request.POST['quantity']
+        hidden =request.POST['hidden']
+        query=""
+        fs = FileSystemStorage()
+        if hidden=="nofile":
+            query = "update products set pname='" + pname + "',description='" + decription + "',cp='" + str(cp) + "',sp='" + str(sp) + "',discount='" + str(discount) + "',quantity='" + str(quantity) + "',cname='" + str(cname) + "' where pid='" + str(pid) + "'"
+        else:
+            photo = request.FILES['photo']
+            fs.save("products/" + photo.name, photo)
+            query = "update products set pname='" + pname + "',description='" + decription + "',cp='" + str(cp) + "',sp='" + str(sp) + "',discount='" + str(discount) + "',quantity='" + str(quantity) + "',photo='"+photo.name+"',cname='" + str(cname) + "' where pid='" + str(pid) + "'"
+        conn=myconnection.connect('')
+        cr=conn.cursor()
+        cr.execute(query)
+        conn.commit()
+        return HttpResponse('success')
     else:
-        photo = request.FILES['photo']
-        fs.save("products/" + photo.name, photo)
-        query = "update products set pname='" + pname + "',description='" + decription + "',cp='" + str(cp) + "',sp='" + str(sp) + "',discount='" + str(discount) + "',quantity='" + str(quantity) + "',photo='"+photo.name+"',cname='" + str(cname) + "' where pid='" + str(pid) + "'"
-    conn=myconnection.connect('')
-    cr=conn.cursor()
-    cr.execute(query)
-    conn.commit()
-    return HttpResponse('success')
+        return render(request, 'adminlogin.html')
 def manageproductphotos(request):
-    pid=request.GET['pid']
-    conn = myconnection.connect('')
-    cr=conn.cursor()
-    query="select * from photos where pid='"+str(pid)+"'"
-    cr.execute(query)
-    result=cr.fetchall()
-    x=[]
-    for row in result:
-        d={}
-        d['photoid']=row[0]
-        d['pid'] = row[1]
-        d['photopath'] = row[2]
-        d['type'] = row[3]
-        x.append(d)
-    list=[]
-    list.append(x)
-    list.append(pid)
-    return render(request,'manageproductphotos.html',{"data":list})
+    if request.session.has_key('adminemail'):
+        pid=request.GET['pid']
+        conn = myconnection.connect('')
+        cr=conn.cursor()
+        query="select * from photos where pid='"+str(pid)+"'"
+        cr.execute(query)
+        result=cr.fetchall()
+        x=[]
+        for row in result:
+            d={}
+            d['photoid']=row[0]
+            d['pid'] = row[1]
+            d['photopath'] = row[2]
+            d['type'] = row[3]
+            x.append(d)
+        list=[]
+        list.append(x)
+        list.append(pid)
+        return render(request,'manageproductphotos.html',{"data":list})
+    else:
+        return render(request, 'adminlogin.html')
 @csrf_exempt
 def insertphoto(request):
-    pid= request.POST['pid']
-    type=request.POST['type']
-    fs=FileSystemStorage()
-    photo=request.FILES['photo']
-    fs.save("products/"+photo.name,photo)
-    conn=myconnection.connect('')
-    cr=conn.cursor()
-    query="insert into photos values(NULL,'"+str(pid)+"','"+str(photo.name)+"','"+str(type)+"')"
-    cr.execute(query)
-    conn.commit()
-    return HttpResponseRedirect('manageproductphotos?pid='+pid)
+    if request.session.has_key('adminemail'):
+        pid= request.POST['pid']
+        type=request.POST['type']
+        fs=FileSystemStorage()
+        photo=request.FILES['photo']
+        fs.save("products/"+photo.name,photo)
+        conn=myconnection.connect('')
+        cr=conn.cursor()
+        query="insert into photos values(NULL,'"+str(pid)+"','"+str(photo.name)+"','"+str(type)+"')"
+        cr.execute(query)
+        conn.commit()
+        return HttpResponseRedirect('manageproductphotos?pid='+pid)
+    else:
+        return render(request, 'adminlogin.html')
 def deleteproductphoto(request):
-    photoid=request.GET['photoid']
-    pid=request.GET['pid']
-    conn = myconnection.connect('')
-    cr = conn.cursor()
-    query = "delete  from photos where photoid='" + str(photoid) + "'"
-    cr.execute(query)
-    conn.commit()
-    return HttpResponseRedirect('manageproductphotos?pid=' + pid)
+    if request.session.has_key('adminemail'):
+        photoid=request.GET['photoid']
+        pid=request.GET['pid']
+        conn = myconnection.connect('')
+        cr = conn.cursor()
+        query = "delete  from photos where photoid='" + str(photoid) + "'"
+        cr.execute(query)
+        conn.commit()
+        return HttpResponseRedirect('manageproductphotos?pid=' + pid)
+    else:
+        return render(request, 'adminlogin.html')
 def openuserdashboard(request):
     request.session['page'] = 'userdashboard'
     return render(request,'userdashboard.html')
